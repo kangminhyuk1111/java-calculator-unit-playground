@@ -5,8 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import stringcalculator.util.InputParser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.*;
 
 class BasicStringCalculatorTest {
 
@@ -22,7 +21,7 @@ class BasicStringCalculatorTest {
     void addString(String input, int answer) {
         final int result = sc.add(input);
 
-        assertEquals(result, answer);
+        assertThat(result).isEqualTo(answer);
     }
 
     @ParameterizedTest
@@ -35,8 +34,22 @@ class BasicStringCalculatorTest {
     void addStringColon(String input, int answer) {
         final int result = sc.add(input);
 
-        assertEquals(result, answer);
+        assertThat(result).isEqualTo(answer);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'1:2:3', 4",
+            "'1,2,3:4:5:6', 12",
+            "'3,7:8:10,1,3', 31"
+    })
+    @DisplayName("값 입력시 틀린 값 반환 검사")
+    void addStringFail(String input, int answer) {
+        final int result = sc.add(input);
+
+        assertThat(result).isNotEqualTo(answer);
+    }
+
 
     @ParameterizedTest
     @CsvSource({
@@ -46,7 +59,7 @@ class BasicStringCalculatorTest {
     void blankString(String input, int answer) {
         final int result = sc.add(input);
 
-        assertEquals(result, answer);
+        assertThat(result).isEqualTo(answer);
     }
 
     @ParameterizedTest
@@ -55,7 +68,7 @@ class BasicStringCalculatorTest {
     })
     @DisplayName("음수 입력시 RuntimeException 발생")
     void StringNegativeException(String input) {
-        assertThrows(RuntimeException.class, () -> sc.add(input));
+        assertThatThrownBy(() -> sc.add(input)).isInstanceOf(RuntimeException.class);
     }
 
     @ParameterizedTest
@@ -65,9 +78,8 @@ class BasicStringCalculatorTest {
     })
     @DisplayName("숫자가 아닌 값 입력시 RuntimeException 발생")
     void StringIsNotValidException(String input) {
-        assertThrows(RuntimeException.class, () -> sc.add(input));
+        assertThatThrownBy(() -> sc.add(input)).isInstanceOf(RuntimeException.class);
     }
-
 
     @ParameterizedTest
     @CsvSource({
@@ -80,6 +92,6 @@ class BasicStringCalculatorTest {
     void addCustomDelimiter(String input, int answer) {
         final int result = sc.add(input);
 
-        assertEquals(result, answer);
+        assertThat(result).isEqualTo(answer);
     }
 }
