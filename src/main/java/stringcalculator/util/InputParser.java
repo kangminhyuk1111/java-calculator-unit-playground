@@ -29,20 +29,25 @@ public class InputParser {
             return new int[0];
         }
 
+        String numbersString = input;
+
         if (hasCustomDelimiter(input)) {
             addCustomDelimiter(input);
-            input = sliceNumbers(input);
+            numbersString = extractNumbersPartFromInput(input);
         }
 
-        return Arrays.stream(input.split(getDelimiterPattern()))
-                .filter(this::isValidNumber)
-                .mapToInt(Integer::parseInt)
-                .toArray();
+        return parseNumbersFromString(numbersString);
     }
 
-    private String sliceNumbers(String input) {
-        int delimiterEndIndex = input.indexOf(END_DELIMITER);
+    private int[] parseNumbersFromString(String numbersString) {
+        return Arrays.stream(numbersString.split(getDelimiterPattern()))
+            .filter(this::isValidNumber)
+            .mapToInt(Integer::parseInt)
+            .toArray();
+    }
 
+    private String extractNumbersPartFromInput(String input) {
+        int delimiterEndIndex = input.indexOf(END_DELIMITER);
         return input.substring(delimiterEndIndex + 1);
     }
 

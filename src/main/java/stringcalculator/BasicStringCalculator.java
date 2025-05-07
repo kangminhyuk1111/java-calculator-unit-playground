@@ -19,3 +19,4 @@ public class BasicStringCalculator implements StringCalculator {
         return Arrays.stream(numbers).sum();
     }
 }
+
